@@ -9,6 +9,7 @@ def transform_csv(file):
     return df
 
 def series_handler(dataframe):
+    dataframe = dataframe.reset_index(drop=True)
     data_dict = dataframe.to_dict()
     index = list(data_dict['location'].keys())[0]
 
@@ -18,6 +19,6 @@ def series_handler(dataframe):
     for key, value in data_dict.items():
         if key == 'location' or key == 'continent':
             continue
-        data_dict[key] = {str(key):value for key, value in value.items()}
+        data_dict[key] = {str(key): value for key, value in value.items()}
 
     return data_dict
