@@ -21,4 +21,17 @@ def insert():
 
     return "OK"
 
+@app.route("/search", methods=['GET'])
+def search():
+    returnable = False
+    try:
+        body = request.get_json()
+        dict_body = json.loads(json.dumps(body))
+
+        returnable = find_one(dict_body)
+    except:
+        return Response("Invalid JSON", status=400)
+    
+    return returnable
+
 app.run()

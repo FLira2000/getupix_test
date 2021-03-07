@@ -4,7 +4,7 @@ from setup import initialize_collection
 collection = initialize_collection()
 
 def find_one(data):
-    return collection.find_one(data)
+    return collection.find_one(data) or {}
 
 def find_various(data):
     pass
