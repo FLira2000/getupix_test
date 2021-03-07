@@ -22,3 +22,12 @@ def series_handler(dataframe):
         data_dict[key] = {str(key): value for key, value in value.items()}
 
     return data_dict
+
+def document_handler(document): #document aqui é um dict vindo da requisição
+    doct_keys = list(document.keys())
+    df = transform_csv(get_csv())
+    cols = list(df.columns)
+    if sorted(doct_keys) != sorted(cols):
+        return False
+    
+    return True
