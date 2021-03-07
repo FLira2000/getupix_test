@@ -8,7 +8,9 @@ app = Flask("owid_covid")
 def index():
     return {"Home": "Sweet Home"}
 
-@app.route("/insert", methods=['POST'])
+# insere um novo documento, não levando em consideração EXATAMENTE O QUE
+# parte do ponto de partida do document based database, que é extensível e permite modificações on the air
+@app.route("/insert", methods=['POST']) 
 def insert():
     id = 0
     try:
@@ -21,6 +23,8 @@ def insert():
 
     return id
 
+# busca por um documento no bd, por json
+# classico do bd
 @app.route("/search", methods=['GET'])
 def search():
     returnable = None
@@ -32,8 +36,12 @@ def search():
     except:
         return Response("Invalid JSON", status=400)
     
-    if returnable != None:
+    if '_id' in list(returnable.keys()):
         del(returnable['_id'])
+    else:
+        return Response("Could not find any document with those informations", status=404)
     return returnable
+
+#@app.route("/insert")
 
 app.run()
