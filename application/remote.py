@@ -1,5 +1,5 @@
 #import pymongo
-from setup import initialize_collection
+from database import initialize_collection
 
 collection = initialize_collection()
 

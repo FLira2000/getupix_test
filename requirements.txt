@@ -2,3 +2,4 @@ pandas
 pymongo
 flask
 dnspython
+progressbar2
