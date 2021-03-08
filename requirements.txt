@@ -1,5 +1,6 @@
 pandas
 pymongo
 flask
+flask_caching
 dnspython
 progressbar2
