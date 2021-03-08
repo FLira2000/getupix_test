@@ -1,4 +1,3 @@
-#import pymongo
 from database import initialize_collection
 
 collection = initialize_collection()
@@ -19,5 +18,14 @@ def alter(data):
     pass
 
 def delete(data):
-    pass
+    return collection.delete_one(data)
 
+def find_population(population):
+	cursor = collection.find()
+
+	# eu nao irei fazer um list comprehension aqui pq senão ficaria horrivel de ler
+	for doc in cursor:
+		for x in doc['population']:
+			if float(doc['population'][str(x)]) == float(population):
+				return doc
+				

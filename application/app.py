@@ -1,8 +1,10 @@
-from typing import Type
+from logging import exception
 from flask import Flask, request, Response
-from remote import find_one, insert_one
+from pandas.core.base import DataError
+from remote import find_one, insert_one, delete, find_population
 from data_preparation import document_handler
 import json
+
 app = Flask("owid_covid")
 
 @app.route("/", methods=["GET"])
@@ -58,6 +60,41 @@ def insert_complete():
 
     return "OK"
 
+# deleta um documento, baseado numa pesquisa
+# precisei colocar um _ no nome, fiquei 5 minutos olhando e me pergutando o pq o flask se recusava a executar o /delete
+@app.route("/delete", methods=['DELETE'])
+def del_ete():
+    try:
+        body = request.get_json()
+        dict_body = json.loads(json.dumps(body))
+        deleted = delete(dict_body)
+    except Exception as e:
+        print(e)
+        return Response("Invalid JSON, please check the structure or if all indexes as strings", status=400)
+
+    return {"Deleted count": deleted.deleted_count}
 
 
+@app.route("/find_population", methods=['GET'])
+def find_by_population():
+    returnable = None
+    try:
+        body = request.get_json()
+        dict_body = json.loads(json.dumps(body))
+        
+        if 'population' not in dict_body.keys() or len(dict_body.keys()) > 1:
+            raise AttributeError
+
+        returnable = find_population(dict_body['population'])
+    except:
+        return Response("Invalid JSON. Check if the JSON contains only the population key/value.", status=400)
+    
+    if '_id' in list(returnable.keys()):
+        del(returnable['_id'])
+    else:
+        return Response("Could not find any document with those population quantity", status=404)
+    return returnable
+
+
+#aplicação rodando
 app.run()
